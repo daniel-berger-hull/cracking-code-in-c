@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1712877573 source:/home/dxb160/data/workspaces/cdev/cryptography/cracking-code-in-c/transposition-cipher/src/transposition-cipher.cpp
+	<iostream>
+	<algorithm>
+	<string>
+	<cctype>
+	<cstring>
+
