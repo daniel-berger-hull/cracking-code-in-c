@@ -1,0 +1,12 @@
+
+
+Use numbers instead of char in the coding tests
+
+To generate a stream of number, use a sinus function.
+     Modulate the information around this sinus functions? A bit like they do in the FM modulation?
+Draw the signal, using an X11 or wxWidget Draw panel
+
+ *  Saturday 17:00  basic screen ready and SignalGenerator class started
+  
+
+
