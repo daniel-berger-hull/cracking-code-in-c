@@ -1,0 +1,10 @@
+Sunday April 14
+---------------
+
+
+  Created a frame and Draw panel, with axis and grid on the background
+ To Do: 
+  The data, from the SignalGenerator is ready to be ploted on the panel.
+  The signal should be sinus..
+ 
+
