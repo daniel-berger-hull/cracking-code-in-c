@@ -32,8 +32,10 @@ bool SignalGenerator::generate(int sampleSize)
 
     for (int i=0;i<sampleSize;i++)
     {
-        signalBuffer[i] = 0;
+        signalBuffer[i] = -125 +  (i % 255);
     }
+
+    bufferSize = sampleSize;
 
     return true;
 }

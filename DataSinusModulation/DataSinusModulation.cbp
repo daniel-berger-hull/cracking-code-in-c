@@ -41,6 +41,10 @@
 		<Linker>
 			<Add option="`wx-config --libs`" />
 		</Linker>
+		<Unit filename="src/GlobalData.cpp" />
+		<Unit filename="src/GlobalData.h" />
+		<Unit filename="src/GraphRendering.cpp" />
+		<Unit filename="src/GraphRendering.h" />
 		<Unit filename="src/SignalGenerator.cpp" />
 		<Unit filename="src/SignalGenerator.h" />
 		<Unit filename="src/main.cpp" />

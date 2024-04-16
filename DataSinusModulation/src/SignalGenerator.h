@@ -13,11 +13,16 @@ class SignalGenerator
 
         bool isValidSampleSize(int sampleSize);
 
+        int *  getSignalBuffer()            {  return signalBuffer;  }
+        unsigned int getBufferSize()        {  return bufferSize;    }
+
+
     protected:
 
     private:
 
         int *signalBuffer = nullptr;
+        unsigned int bufferSize = 0;
 };
 
 #endif // SIGNALGENERATOR_H

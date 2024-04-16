@@ -7,4 +7,16 @@ Sunday April 14
   The data, from the SignalGenerator is ready to be ploted on the panel.
   The signal should be sinus..
  
+Monday April 15
+---------------
+
+  * Created a singleton class, and that class  holds the data to be draw
+  * Removed the MyApp dependeency in the DrawPanel
+ * There is something that is drawn now...
+
+ To Do:
+   Extract the BasicDrawPane class into its own file
+     Started the work, and created a skeloton class GraphRendering..
+     must transfer all the functions and fields from BasicDrawPane to GraphRendering
+   Use a sinus in the generator class
 

@@ -3,7 +3,9 @@
 
 #include <iostream>
 
+#include "GraphRendering.h"
 #include "SignalGenerator.h"
+#include "GlobalData.h"
 
 
 #define   FRAME_WIDTH       800
@@ -63,8 +65,7 @@ public:
 
 private:
     MyApp* parent;
-   // void OnHello(wxCommandEvent& event);
-   // void OnSpawnChild(wxCommandEvent& event);
+
     void OnExit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
@@ -77,7 +78,9 @@ class BasicDrawPane : public wxPanel
 {
 
 public:
-    BasicDrawPane(MyApp *app, wxFrame* parent);
+    //BasicDrawPane(MyApp *app, wxFrame* parent);
+    BasicDrawPane(wxFrame* parent);
+
 
     void paintEvent(wxPaintEvent & evt);
     void paintNow();
@@ -101,11 +104,10 @@ public:
 
   private:
 
-     MyApp *mainApp = nullptr;
+   // MyApp *mainApp = nullptr;
      void drawOutsideFrame(wxDC&  dc, DrawParam canvasParam);
      void drawBackgroundGrid(wxDC&  dc,DrawParam canvasParam);
-     void drawData(wxDC&  dc,DrawParam canvasParam, SignalGenerator *signal);
-
+     void drawData(wxDC&  dc,DrawParam canvasParam);
 };
 
 
@@ -131,15 +133,10 @@ MyApp::~MyApp()
 
 bool MyApp::OnInit()
 {
-    //MyFrame * frame = new MyFrame();
     MyFrame * frame = new MyFrame(this);
 
-    BasicDrawPane * drawPane   = new BasicDrawPane( this, (wxFrame*) frame );
+    BasicDrawPane * drawPane   = new BasicDrawPane( (wxFrame*) frame );
 
-
-
-
-//    drawPane = new BasicDrawPane( (wxFrame*) frame );
 
      wxButton* testButton = new wxButton( frame, ID_REDRAW_BUTTON, "OK" , wxPoint(40,700), wxSize(100,30));
 
@@ -149,6 +146,19 @@ bool MyApp::OnInit()
 
     cout << "OnInit called\n";
     signal = new SignalGenerator();
+    signal->generate(256);
+
+    GlobalData* singleton = GlobalData::GetInstance();
+
+  //  int* myBuffer = new int[256];
+  //  for (int i=0;i<256;i++)   myBuffer[i] = i;
+
+//    singleton->copySignalBuffer(myBuffer,256);
+    singleton->copySignalBuffer(signal->getSignalBuffer(),256);
+
+
+ //   delete myBuffer;
+
     return true;
 }
 
@@ -245,10 +255,11 @@ END_EVENT_TABLE()
 
 
 
-BasicDrawPane::BasicDrawPane(MyApp *app,wxFrame* parent) : wxPanel(parent, -1, wxDefaultPosition, wxSize(CANVAS_WIDTH,CANVAS_HEIGHT))
-{
-   this->mainApp = app;
+//BasicDrawPane::BasicDrawPane(MyApp *app,wxFrame* parent) : wxPanel(parent, -1, wxDefaultPosition, wxSize(CANVAS_WIDTH,CANVAS_HEIGHT))
+BasicDrawPane::BasicDrawPane(wxFrame* parent) : wxPanel(parent, -1, wxDefaultPosition, wxSize(CANVAS_WIDTH,CANVAS_HEIGHT))
 
+{
+   //this->mainApp = app;
 }
 
 void BasicDrawPane::paintEvent(wxPaintEvent & evt)
@@ -283,13 +294,7 @@ void BasicDrawPane::render(wxDC&  dc)
     drawBackgroundGrid(dc,DRAWING_PARAMS);
 
 
-    drawData(dc,DRAWING_PARAMS, this->mainApp->getSignalGenerator() );
-
-
-
-
-
-    // Look at the wxDC docs to learn how to draw other stuff
+    drawData(dc,DRAWING_PARAMS);
 }
 
 
@@ -297,8 +302,6 @@ void BasicDrawPane::render(wxDC&  dc)
 //void BasicDrawPane::drawOutsideFrame(wxDC&  dc, DrawParam canvasParam, wxColor color)
 void BasicDrawPane::drawOutsideFrame(wxDC&  dc, DrawParam canvasParam)
 {
-
-
     dc.SetPen( wxPen( wxColor(canvasParam.axisColor.Red(), canvasParam.axisColor.Green(), canvasParam.axisColor.Blue() ), 2 ) );
     dc.DrawRectangle( canvasParam.canvasMargin, canvasParam.canvasMargin,
                        canvasParam.canvasWidth-(2*canvasParam.canvasMargin),
@@ -325,10 +328,35 @@ void BasicDrawPane::drawBackgroundGrid(wxDC&  dc,DrawParam canvasParam)
 
 };
 
-void BasicDrawPane::drawData(wxDC&  dc,DrawParam canvasParam, SignalGenerator *data)
+
+//void BasicDrawPane::drawData(wxDC&  dc,DrawParam canvasParam, int *data)
+void BasicDrawPane::drawData(wxDC&  dc,DrawParam canvasParam)
 {
-   if (data == nullptr)
+   GlobalData* singleton = GlobalData::GetInstance();
+
+   int *data = singleton->getSignalBuffer();
+   unsigned int dataSize = singleton->getBufferSize();
+
+   if (data == nullptr || dataSize<=0)
      throw ("Invalid data (null pointer provided to the drawData method!)");
+
+
+    //int centerY =  canvasParam.canvasMargin + (canvasParam.canvasHeight / 2);
+    int centerY =  canvasParam.canvasHeight / 2;
+
+    int minX =  canvasParam.canvasMargin + 4;
+    int maxX =  canvasParam.canvasWidth-(2*canvasParam.canvasMargin);
+    int x = minX;
+
+    //for (x=minX; x<maxX; x+= 5)
+    dc.SetPen( wxPen( wxColor(0,255,0), 2 ) ); // 5-pixels-thick red outline
+    for (int i=0;i<dataSize;i++)
+    {
+        int y = centerY + data[i];
+        dc.DrawCircle( wxPoint(x,y), 4 );
+        x +=2;
+    }
+
 }
 
 
